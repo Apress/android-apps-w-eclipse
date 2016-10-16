@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MoviePlayer</string>
+    <string name="large_text">Large Text</string>
+    <string name="small_text">Small Text</string>
+    
+    <string name="avi_player_label">AVI Player</string>
+
+</resources>

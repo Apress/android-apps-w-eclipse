@@ -1,0 +1,74 @@
+<html>
+<head>
+    <title>Calculator</title>
+
+    <style type="text/css">
+        label { 
+            display: block; 
+        }
+
+        #solution { 
+            margin-top: 0.6em; 
+            font-size: 2em; 
+        }
+    </style>
+</head>
+<body>
+    <form onsubmit="return calculate();">
+
+    <fieldset>
+        <legend>Calculator</legend>
+
+        <label for="first">First number:</label>
+        <input type="number" id="first" />
+
+        <label for"second">Second number:</label>
+        <input type="number" id="second" />
+
+        <label for="operation">Operation:</label>
+        <select id="operation">
+            <option value="+">+</option>
+            <option value="-">-</option>
+            <option value="*">*</option>
+            <option value="/">/</option>
+        </selecT>
+
+        <input type="submit" value="Calculate" />
+        <div id="solution"></div>
+    </fieldset>
+
+    </form>
+
+    <script type="text/javascript">
+        // Initalize the RPC client
+        var droid = new Android();
+
+        // Get elements by id
+        var first = document.getElementById("first");
+        var second = document.getElementById("second");
+        var operation = document.getElementById("operation");
+        var solution = document.getElementById("solution");
+
+        // Register a callback listener for solution
+        droid.registerCallback("solution", function(data) {
+            solution.innerHTML = data.data;
+        });
+
+        // Calculate function
+        function calculate() {
+            // Put parameters into a dictionary
+            var request = [
+                parseInt(first.value),
+                parseInt(second.value),
+                operation.value
+            ].join();
+
+            // Post request as an event
+            droid.eventPost("calculate", request);
+
+            return false;
+        }
+    </script>
+
+</body>
+</html>

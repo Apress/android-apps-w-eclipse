@@ -1,0 +1,124 @@
+<html>
+<head>
+	<style type="text/css">
+		.movie {
+			border: 1px solid #000;
+			padding: 0.4em;
+		}
+	
+		.thumbnail {
+			width: 4em;
+			height: 4em;
+			float: left;
+			margin-right: 0.4em;
+		}
+	
+		.title {
+			font-size: x-large;
+		}
+	
+		.clear {
+			clear: both;
+		}
+	</style>
+</head>
+<body>
+
+	<div id="movies"></div>
+
+	<script type="text/javascript">
+		// Initialize the RPC client
+		var droid = new Android();
+			
+		// Movie element
+		var moviesElement = document.getElementById("movies");
+ 
+ 		/**
+ 		 * Clear movies.
+ 		 */
+		function clearMovies() {
+			moviesElement.innerHTML = '';
+		}
+		
+		/**
+		 * On movie click handler.
+		 *
+		 * @param e UI event.
+		 */
+		function onMovieClick(e) {
+			// Get clicked movie item
+			var movieElement = e.currentTarget;
+			
+			// Movie path
+			var moviePath = movieElement.getAttribute("data-moviepath");
+			
+			// MIME type
+			var mimeType = movieElement.getAttribute("data-mimetype");
+			
+			// View movie
+			droid.view(moviePath, mimeType); 
+		}
+		
+		/**
+		 * Add movie.
+		 *
+		 * @param title movie title.
+		 */
+		function addMovie(title, moviePath, mimeType, duration, thumbnailPath) {
+			// Movie element
+			var movieElement = document.createElement("div");
+			movieElement.setAttribute("class", "movie");
+			movieElement.setAttribute("data-moviepath", moviePath);
+			movieElement.setAttribute("data-mimetype", mimeType);
+			movieElement.onclick = onMovieClick;
+
+			// Thumbnail element
+			var thumbnailElement = document.createElement("img");
+			thumbnailElement.setAttribute("class", "thumbnail");
+			thumbnailElement.src = thumbnailPath;
+			movieElement.appendChild(thumbnailElement);
+			
+			// Title element
+			var titleElement = document.createElement("div");
+			titleElement.setAttribute("class", "title");
+			titleElement.innerHTML = title;
+			movieElement.appendChild(titleElement);
+			
+			// Duration element
+			var durationElement = document.createElement("div");
+			durationElement.setAttribute("class", "duration");
+			durationElement.innerHTML = duration;
+			movieElement.appendChild(durationElement);
+			
+			// Clear element
+			var clearElement = document.createElement("div");
+			clearElement.setAttribute("class", "clear");
+			movieElement.appendChild(clearElement);
+
+			// Append movie to list			
+			moviesElement.appendChild(movieElement);
+		}
+		
+		/**
+		 * Populate movies.
+		  */
+		function populateMovies() {
+			// Get movies
+			var movies = droid.moviesGet().result;
+			
+			for (var i = 0, e = movies.length; i < e; i++) {
+				var movie = movies[i];
+				
+				addMovie(
+					movie["title"],
+					movie["moviePath"],
+					movie["mimeType"],
+					movie["duration"],
+					movie["thumbnailPath"]);			
+			}
+		}
+		
+		populateMovies();
+	</script>
+</body>
+</html>
